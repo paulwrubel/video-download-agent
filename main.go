@@ -17,7 +17,7 @@ import (
 
 type Set struct {
 	Name            string `mapstructure:"name"`
-	Path            string `mapstructure:"path"`   // root path to store files
+	URL             string `mapstructure:"url"`    // url of video to download
 	Format          string `mapstructure:"format"` // --format
 	Output          string `mapstructure:"output"` // --output
 	DownloadArchive string `mapstructure:"output"` //download-archive
@@ -110,6 +110,7 @@ func main() {
 				// setting flags
 				logEntry.Debugln("setting flags")
 				var args []string
+				args = append(args, "--verbose")
 				args = append(args, "--format", set.Format)
 				args = append(args, "--output", set.Output)
 				if set.DownloadArchive != "" {
@@ -128,6 +129,7 @@ func main() {
 					args = append(args, "--simulate")
 				}
 				args = append(args, set.AdditionalFlags...)
+				args = append(args, set.URL)
 
 				// creating command
 				ytdlCmd := exec.Command(ytdlPath, args...)
