@@ -53,7 +53,5 @@ steps:
         - latest
         - prod
       when:
-        branch:
-          - main
         event:
           - tag
