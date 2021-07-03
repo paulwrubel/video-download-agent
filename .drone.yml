@@ -36,11 +36,11 @@ steps:
       repo: paulwrubel/video-download-agent
       tags:
         - dev
-      when:
-        branch:
-          - main
-        event:
-          - push
+    when:
+      branch:
+        - main
+      event:
+        - push
   - name: publish
     image: plugins/docker
     settings:
@@ -52,6 +52,8 @@ steps:
       tags:
         - latest
         - prod
-      when:
-        event:
-          - tag
+    when:
+      branch:
+        - main
+      event:
+        - tag
