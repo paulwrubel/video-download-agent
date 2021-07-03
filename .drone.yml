@@ -5,7 +5,7 @@ name: video-download-agent
 clone:
   disable: true
 
-  steps:
+steps:
   - name: clone
     image: alpine/git
     commands:
@@ -13,10 +13,10 @@ clone:
 
   - name: build
     image: golang:1.16
-    commands: 
-      - GOOS=linux 
-        GOARCH=amd64 
-        CGO_ENABLED=0 
+    commands:
+      - GOOS=linux
+        GOARCH=amd64
+        CGO_ENABLED=0
         go build -o vd_agent main.go
     when:
       branch:
@@ -31,7 +31,7 @@ clone:
     settings:
       username:
         from_secret: docker_username
-      password: 
+      password:
         from_secret: docker_password
       repo: paulwrubel/video-download-agent
       tags:
@@ -41,19 +41,19 @@ clone:
           - main
         event:
           - push
-   - name: publish
-      image: plugins/docker
-      settings:
-        username:
-          from_secret: docker_username
-        password: 
-          from_secret: docker_password
-        repo: paulwrubel/video-download-agent
-        tags:
-          - latest
-          - prod
-        when:
-          branch:
-            - main
-          event:
-            - tag
+  - name: publish
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: paulwrubel/video-download-agent
+      tags:
+        - latest
+        - prod
+      when:
+        branch:
+          - main
+        event:
+          - tag
