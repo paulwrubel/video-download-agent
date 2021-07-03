@@ -17,10 +17,10 @@ import (
 
 type Set struct {
 	Name            string `mapstructure:"name"`
-	URL             string `mapstructure:"url"`    // url of video to download
-	Format          string `mapstructure:"format"` // --format
-	Output          string `mapstructure:"output"` // --output
-	DownloadArchive string `mapstructure:"output"` //download-archive
+	URL             string `mapstructure:"url"`              // url of video to download
+	Format          string `mapstructure:"format"`           // --format
+	Output          string `mapstructure:"output"`           // --output
+	DownloadArchive string `mapstructure:"download_archive"` // --download-archive
 
 	IngoreErrors    bool     `mapstructure:"ignore_errors"`    // --ignore-errors
 	PlaylistReverse bool     `mapstructure:"playlist_reverse"` // --playlist-reverse
