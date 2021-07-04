@@ -148,29 +148,8 @@ func main() {
 				}
 
 				// redirect pipe output to logger
-				var stdoutDoneChan chan bool
-				go func(rc io.ReadCloser, doneChan chan<- bool) {
-					scanner := bufio.NewScanner(stdout)
-					for scanner.Scan() {
-						logEntry.Debugf("\t%s\n", scanner.Text())
-					}
-					if err := scanner.Err(); err != nil {
-						logEntry.WithError(err).Errorln("error from stdout scanner")
-					}
-					doneChan <- true
-				}(stdout, stdoutDoneChan)
-
-				var stderrDoneChan chan bool
-				go func(rc io.ReadCloser, doneChan chan<- bool) {
-					scanner := bufio.NewScanner(stderr)
-					for scanner.Scan() {
-						logEntry.Errorf("\t%s\n", scanner.Text())
-					}
-					if err := scanner.Err(); err != nil {
-						logEntry.WithError(err).Errorln("error from stderr scanner")
-					}
-					doneChan <- true
-				}(stderr, stderrDoneChan)
+				go redirectToLogger(logEntry, logEntry.Debugf, stdout)
+				go redirectToLogger(logEntry, logEntry.Errorf, stderr)
 
 				// start youtube-dl command
 				logEntry.Debugln("starting command")
@@ -179,11 +158,6 @@ func main() {
 					logEntry.WithError(err).Errorln("error starting command, continuing...")
 					continue
 				}
-
-				// wait on pipes to finish reading
-				logEntry.Debugln("waiting on pipes...")
-				<-stdoutDoneChan
-				<-stderrDoneChan
 
 				// wait on command (which will close pipes)
 				logEntry.Debugln("waiting on cmd...")
@@ -207,4 +181,14 @@ func main() {
 	<-shutdownChan
 
 	log.Infoln("shutting down")
+}
+
+func redirectToLogger(logEntry *log.Entry, logFunc func(string, ...interface{}), file io.ReadCloser) {
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		logFunc("\t%s\n", scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		logEntry.WithError(err).Errorln("error from stderr scanner")
+	}
 }
