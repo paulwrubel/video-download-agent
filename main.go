@@ -16,16 +16,10 @@ import (
 )
 
 type Set struct {
-	Name            string `mapstructure:"name"`
-	URL             string `mapstructure:"url"`              // url of video to download
-	Format          string `mapstructure:"format"`           // --format
-	Output          string `mapstructure:"output"`           // --output
-	DownloadArchive string `mapstructure:"download_archive"` // --download-archive
-
-	IngoreErrors    bool     `mapstructure:"ignore_errors"`    // --ignore-errors
-	PlaylistReverse bool     `mapstructure:"playlist_reverse"` // --playlist-reverse
-	AddMetadata     bool     `mapstructure:"add_metadata"`     // --add-metadata
-	AdditionalFlags []string `mapstructure:"additional_flags"`
+	Name    string            `mapstructure:"name"`
+	URL     string            `mapstructure:"url"` // url of video to download
+	Options map[string]string `mapstructure:"options"`
+	Flags   []string          `mapstructure:"flags"`
 }
 
 func main() {
@@ -89,7 +83,6 @@ func main() {
 	viper.UnmarshalKey("sets", &sets)
 
 	// starting metrics ticker
-	isDryRun := viper.GetBool("dry_run")
 	interval := viper.GetDuration("polling_interval")
 
 	ytdlPath, err := exec.LookPath("youtube-dl")
@@ -110,25 +103,10 @@ func main() {
 				// setting flags
 				logEntry.Debugln("setting flags")
 				var args []string
-				args = append(args, "--verbose")
-				args = append(args, "--format", set.Format)
-				args = append(args, "--output", set.Output)
-				if set.DownloadArchive != "" {
-					args = append(args, "--download-archive", set.DownloadArchive)
+				for option, data := range set.Options {
+					args = append(args, option, data)
 				}
-				if set.IngoreErrors {
-					args = append(args, "--ignore-errors")
-				}
-				if set.PlaylistReverse {
-					args = append(args, "--playlist-reverse")
-				}
-				if set.AddMetadata {
-					args = append(args, "--add-metadata")
-				}
-				if isDryRun {
-					args = append(args, "--simulate")
-				}
-				args = append(args, set.AdditionalFlags...)
+				args = append(args, set.Flags...)
 				args = append(args, set.URL)
 
 				// creating command
