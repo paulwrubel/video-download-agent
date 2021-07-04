@@ -79,6 +79,11 @@ func main() {
 		log.WithField("missing_keys", strings.Join(missingKeys, ",")).Fatalln("missing keys in config")
 	}
 
+	globalFlags := []string{}
+	if viper.IsSet("global_flags") {
+		globalFlags = viper.GetStringSlice("global_flags")
+	}
+
 	var sets []Set
 	viper.UnmarshalKey("sets", &sets)
 
@@ -107,6 +112,7 @@ func main() {
 					args = append(args, option, data)
 				}
 				args = append(args, set.Flags...)
+				args = append(args, globalFlags...)
 				args = append(args, set.URL)
 
 				// creating command
