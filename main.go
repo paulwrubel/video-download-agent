@@ -43,7 +43,7 @@ func main() {
 	log.Infoln("validating configuration")
 
 	// setting log level based on debug flag
-	switch viper.GetString("logging.level") {
+	switch strings.ToLower(viper.GetString("logging.level")) {
 	case "panic":
 		log.SetLevel(log.PanicLevel)
 	case "fatal":
@@ -96,17 +96,17 @@ func main() {
 	}
 
 	log.WithField("interval", interval.String()).Infoln("starting metrics ticker")
-	metricsTicker := time.NewTicker(interval)
-	defer metricsTicker.Stop()
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
 	go func() {
-		for ; true; <-metricsTicker.C {
+		for ; true; <-ticker.C {
+			tickTime := time.Now()
 			for _, set := range sets {
-				tickTime := time.Now()
 				logEntry := log.WithTime(tickTime).WithField("set", set.Name)
-				logEntry.Debugln("beginning set")
+				logEntry.Infoln("beginning set")
 
 				// setting flags
-				logEntry.Debugln("setting flags")
+				logEntry.Infoln("setting flags")
 				var args []string
 				for option, data := range set.Options {
 					args = append(args, option, data)
@@ -117,7 +117,7 @@ func main() {
 
 				// creating command
 				ytdlCmd := exec.Command(ytdlPath, args...)
-				logEntry.Debugf("final command: \"%s\"\n", ytdlCmd.String())
+				logEntry.Infof("final command: \"%s\"\n", ytdlCmd.String())
 
 				// creating pipes
 				stdout, err := ytdlCmd.StdoutPipe()
@@ -136,7 +136,7 @@ func main() {
 				go redirectToLogger(logEntry, logEntry.Errorf, stderr)
 
 				// start youtube-dl command
-				logEntry.Debugln("starting command")
+				logEntry.Infoln("starting command")
 				err = ytdlCmd.Start()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error starting command, continuing...")
@@ -144,14 +144,14 @@ func main() {
 				}
 
 				// wait on command (which will close pipes)
-				logEntry.Debugln("waiting on cmd...")
+				logEntry.Infoln("waiting on cmd...")
 				err = ytdlCmd.Wait()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error waiting on cmd, continuing...")
 					continue
 				}
 
-				logEntry.Debugln("set complete")
+				logEntry.Infoln("set complete")
 			}
 			log.Infoln("waiting for next interval...")
 		}
