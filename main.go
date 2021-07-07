@@ -84,6 +84,11 @@ func main() {
 		globalFlags = viper.GetStringSlice("global_flags")
 	}
 
+	globalOpts := map[string]string{}
+	if viper.IsSet("global_options") {
+		globalOpts = viper.GetStringMapString("global_options")
+	}
+
 	var sets []Set
 	viper.UnmarshalKey("sets", &sets)
 
@@ -109,6 +114,9 @@ func main() {
 				logEntry.Infoln("setting flags")
 				var args []string
 				for option, data := range set.Options {
+					args = append(args, option, data)
+				}
+				for option, data := range globalOpts {
 					args = append(args, option, data)
 				}
 				args = append(args, set.Flags...)
