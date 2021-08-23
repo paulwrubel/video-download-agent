@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.12
 
 RUN apk add --no-cache bash ffmpeg python3 py-pip zip py3-pycryptodome mutagen coreutils parallel
 RUN python3 -m pip install --no-cache-dir -U yt-dlp
