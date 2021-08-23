@@ -1,7 +1,11 @@
-FROM alpine:3.12
+FROM python:buster
 
-RUN apk add --no-cache bash ffmpeg python3 py-pip zip py3-pycryptodome mutagen coreutils parallel
-RUN python3 -m pip install --no-cache-dir -U yt-dlp
+RUN apt-get -y update && \
+    apt-get install -y ffmpeg bash python3 python3-pip &&\
+    apt-get -y update && \
+    apt-get clean all && \
+    python3 -m pip install --upgrade git+https://github.com/yt-dlp/yt-dlp.git@release && \
+    python3 -m pip install apprise
 
 ADD vd_agent /app/vd_agent
 
