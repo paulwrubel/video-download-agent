@@ -95,9 +95,9 @@ func main() {
 	// starting metrics ticker
 	interval := viper.GetDuration("polling_interval")
 
-	ytdlPath, err := exec.LookPath("youtube-dl")
+	ytdlpPath, err := exec.LookPath("yt-dlp")
 	if err != nil {
-		log.WithError(err).Fatalln("could not find youtube-dl path")
+		log.WithError(err).Fatalln("could not find yt-dlp path")
 	}
 
 	log.WithField("interval", interval.String()).Infoln("starting metrics ticker")
@@ -124,16 +124,16 @@ func main() {
 				args = append(args, set.URL)
 
 				// creating command
-				ytdlCmd := exec.Command(ytdlPath, args...)
-				logEntry.Infof("final command: \"%s\"\n", ytdlCmd.String())
+				ytdlpCmd := exec.Command(ytdlpPath, args...)
+				logEntry.Infof("final command: \"%s\"\n", ytdlpCmd.String())
 
 				// creating pipes
-				stdout, err := ytdlCmd.StdoutPipe()
+				stdout, err := ytdlpCmd.StdoutPipe()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error creating stdout pipe, skipping set...")
 					continue
 				}
-				stderr, err := ytdlCmd.StderrPipe()
+				stderr, err := ytdlpCmd.StderrPipe()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error creating stderr pipe, skipping set...")
 					continue
@@ -145,7 +145,7 @@ func main() {
 
 				// start youtube-dl command
 				logEntry.Infoln("starting command")
-				err = ytdlCmd.Start()
+				err = ytdlpCmd.Start()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error starting command, continuing...")
 					continue
@@ -153,7 +153,7 @@ func main() {
 
 				// wait on command (which will close pipes)
 				logEntry.Infoln("waiting on cmd...")
-				err = ytdlCmd.Wait()
+				err = ytdlpCmd.Wait()
 				if err != nil {
 					logEntry.WithError(err).Errorln("error waiting on cmd, continuing...")
 					continue
