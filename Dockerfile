@@ -38,11 +38,12 @@ RUN set -x && \
     git config --global advice.detachedHead false && \
     # Install required python modules
     python3 -m pip install --no-cache-dir pyxattr && \
-    # Install ytdlp
+    # Install yt-dlp
     git clone https://github.com/yt-dlp/yt-dlp.git /src/yt-dlp && \
     pushd /src/yt-dlp && \
     BRANCH_YTDLP=$(git tag --sort='creatordate' | tail -1) && \
     git checkout "${BRANCH_YTDLP}" && \
+    export DESTDIR="" \
     make && \
     make install && \
     popd && \
