@@ -1,4 +1,4 @@
-FROM debian:sid-slim
+FROM debian:bullseye-slim
 
 ENV LC_ALL=C.UTF-8 \
     LANG=C.UTF-8 \
