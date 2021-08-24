@@ -29,6 +29,7 @@ RUN set -x && \
     KEPT_PACKAGES+=(zip) && \
     KEPT_PACKAGES+=(atomicparsley) && \
     KEPT_PACKAGES+=(aria2) && \
+    KEPT_PACKAGES+=(libdbus-glib-1-dev) && \
     # Install packages
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
@@ -37,7 +38,16 @@ RUN set -x && \
     && \
     git config --global advice.detachedHead false && \
     # Install required python modules
-    python3 -m pip install --no-cache-dir pyxattr && \
+    python3 -m pip install -U pip && \
+    python3 -m pip install --no-cache-dir \
+    pyxattr \
+    pycryptodome \
+    websockets \
+    secretstorage \
+    dbus-python \
+    keyring \
+    mutagen \
+    && \
     # Install yt-dlp
     git clone https://github.com/yt-dlp/yt-dlp.git /src/yt-dlp && \
     pushd /src/yt-dlp && \
