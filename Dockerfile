@@ -40,7 +40,7 @@ RUN set -x && \
     python3 -m pip install --no-cache-dir pyxattr && \
     # Install ytdlp
     git clone https://github.com/yt-dlp/yt-dlp.git /src/yt-dlp && \
-    pushd /src/youtube-dl && \
+    pushd /src/yt-dlp && \
     BRANCH_YTDLP=$(git tag --sort='creatordate' | tail -1) && \
     git checkout "${BRANCH_YTDLP}" && \
     make && \
