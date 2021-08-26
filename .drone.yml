@@ -11,21 +11,6 @@ steps:
     commands:
       - git clone --single-branch --branch $DRONE_SOURCE_BRANCH --depth=1 $DRONE_GIT_HTTP_URL .
 
-  - name: build
-    image: golang:1.16
-    commands:
-      - GOOS=linux
-        GOARCH=amd64
-        CGO_ENABLED=0
-        go build -o vd_agent main.go
-    when:
-      branch:
-        - main
-      event:
-        - push
-        - pull_request
-        - tag
-
   - name: publish-dev
     image: plugins/docker
     settings:

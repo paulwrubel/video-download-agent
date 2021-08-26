@@ -1,0 +1,27 @@
+interval: 600
+global_options:
+  "format": "(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)[protocol^=http][protocol!*=dash]/(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)"
+  "merge_output_format": "mp4"
+  "convertthumbnails": "png"
+  "subtitlesformat": "srt/best"
+  "subtitleslangs": 
+    - "en.*"
+    - "live_chat"
+  # "--compat-options": "embed-thumbnail-atomicparsley"
+  "verbose": true
+  "no-progress": true
+  "ignore-errors": true
+  # - "--no-cache-dir"
+  "addmetadata": true
+  "embedthumbnail": true
+  "writethumbnail": true
+  "embedsubtitles": true
+  "writesubtitles": true
+  "keepvideo": true
+sets:
+  # Example Video
+  - name: Example
+    url: https://www.youtube.com/watch?v=ne6nj9AgY7M
+    options:
+      "outtmpl": 
+        default: "/output/Example/Example - %(title)s - %(upload_date>%Y.%m.%d)s [%(id)s].%(ext)s"
