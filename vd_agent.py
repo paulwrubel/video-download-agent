@@ -56,24 +56,24 @@ class VideoDownloadAgent():
                     **self.config['global_options'],
                     **set['options']
                 }
-            try:
-                with yt_dlp.YoutubeDL(set_opts) as ytdlp:
-                    print('clearing yt-dlp cache')
-                    print('-'*20)
-                    ytdlp.cache.remove()
-                    print('-'*20)
-                    print('starting yt-dlp')
-                    print('-'*20)
-                    ytdlp.download([set['url']])
-                    print('-'*20)
-                    print('download complete!')
-                    print('\n'*2, end=None)
-                    print('jobs info:')
-                    print('-'*20)
-                    self.sched.print_jobs()
-                    print('-'*20)
-            except Exception as e:
-                oops(e, f'error running ytdlp.download(): {e}')
+                try:
+                    with yt_dlp.YoutubeDL(set_opts) as ytdlp:
+                        print('clearing yt-dlp cache')
+                        print('-'*20)
+                        ytdlp.cache.remove()
+                        print('-'*20)
+                        print('starting yt-dlp')
+                        print('-'*20)
+                        ytdlp.download([set['url']])
+                        print('-'*20)
+                        print('download complete!')
+                        print('\n'*2, end=None)
+                        print('jobs info:')
+                        print('-'*20)
+                        self.sched.print_jobs()
+                        print('-'*20)
+                except Exception as e:
+                    oops(e, f'error running ytdlp.download(): {e}')
         except Exception as e:
             oops(e, f'error running single iteration: {e}')
 
