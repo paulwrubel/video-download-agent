@@ -26,6 +26,23 @@ steps:
         - main
       event:
         - push
+
+  - name: publish-v2
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: paulwrubel/video-download-agent
+      tags:
+        - v2
+    when:
+      branch:
+        - v2
+      event:
+        - push
+
   - name: publish
     image: plugins/docker
     settings:
