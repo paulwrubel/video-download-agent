@@ -58,6 +58,10 @@ class VideoDownloadAgent():
                 }
             try:
                 with yt_dlp.YoutubeDL(set_opts) as ytdlp:
+                    print('clearing yt-dlp cache')
+                    print('-'*20)
+                    ytdlp.cache.remove()
+                    print('-'*20)
                     print('starting yt-dlp')
                     print('-'*20)
                     ytdlp.download([set['url']])

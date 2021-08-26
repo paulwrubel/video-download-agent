@@ -1,23 +1,34 @@
 interval: 600
 global_options:
-  "format": "(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)[protocol^=http][protocol!*=dash]/(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)"
-  "merge_output_format": "mp4"
-  "convertthumbnails": "png"
-  "subtitlesformat": "srt/best"
-  "subtitleslangs": 
+  format: "(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)[protocol^=http][protocol!*=dash]/(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)"
+  merge_output_format: "mp4"
+  cookiefile: "/app/cookies.txt"
+  subtitlesformat: "srt/best"
+  subtitleslangs:
     - "en.*"
     - "live_chat"
-  # "--compat-options": "embed-thumbnail-atomicparsley"
-  "verbose": true
-  "no-progress": true
-  "ignore-errors": true
-  # - "--no-cache-dir"
-  "addmetadata": true
-  "embedthumbnail": true
-  "writethumbnail": true
-  "embedsubtitles": true
-  "writesubtitles": true
-  "keepvideo": true
+  verbose: true
+  noprogress: true
+  ignoreerrors: true
+  writethumbnail: true
+  writesubtitles: true
+  # apparently this can help with the 403 problem
+  cachedir: false
+  postprocessors:
+    # this is equivalent to --add-metadata
+    - key: "FFmpegMetadata"
+    # this is equivalent to --convert-thumbnails png
+    - key: "FFmpegThumbnailsConvertor"
+      format: "png"
+      when: "before_dl"
+    # this is equivalent to --embed-thumbnail
+    - key: "EmbedThumbnail"
+      # this MUST be true if --write-thumbnail is true, otherwise MUST be false
+      already_have_thumbnail: true
+    # this is equivalent to --embed-subs
+    - key: "FFmpegEmbedSubtitle"
+      # this MUST be true if --write-subs is true, otherwise MUST be false
+      already_have_subtitle: true
 sets:
   # Example Video
   - name: Example
