@@ -80,10 +80,11 @@ FROM python:3-bullseye
 RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
-    ffmpeg && \
+    ffmpeg \
+    atomicparsley && \
     python3 -m pip install -U pip && \
     python3 -m pip install --no-cache-dir \
-    yt_dlp \
+    git+git+https://github.com/paulwrubel/yt-dlp \
     pyyaml \
     apscheduler
 

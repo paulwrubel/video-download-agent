@@ -2,18 +2,20 @@ interval: 600
 global_options:
   format: "(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)[protocol^=http][protocol!*=dash]/(bv+ba[ext=m4a]/b[ext=mp4]/bv+ba/b)"
   merge_output_format: "mp4"
-  cookiefile: "/app/cookies.txt"
   subtitlesformat: "srt/best"
   subtitleslangs:
     - "en.*"
     - "live_chat"
+  # noprogress: true
   verbose: true
-  noprogress: true
+  progress_with_newline: true
   ignoreerrors: true
   writethumbnail: true
   writesubtitles: true
   # apparently this can help with the 403 problem
   cachedir: false
+  # compat_opts:
+  #   - "embed-thumbnail-atomicparsley"
   postprocessors:
     # this is equivalent to --add-metadata
     - key: "FFmpegMetadata"
@@ -32,7 +34,7 @@ global_options:
 sets:
   # Example Video
   - name: Example
-    url: https://www.youtube.com/watch?v=ne6nj9AgY7M
+    url: https://www.youtube.com/watch?v=DeumyOzKqgI
     options:
-      "outtmpl": 
-        default: "/output/Example/Example - %(title)s - %(upload_date>%Y.%m.%d)s [%(id)s].%(ext)s"
+      outtmpl: 
+        default: "/output/Testing/Testing - %(title)s - %(upload_date>%Y.%m.%d)s [%(id)s].%(ext)s"
