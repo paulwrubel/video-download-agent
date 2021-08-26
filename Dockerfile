@@ -84,7 +84,7 @@ RUN set -x && \
     atomicparsley && \
     python3 -m pip install -U pip && \
     python3 -m pip install --no-cache-dir \
-    git+git+https://github.com/paulwrubel/yt-dlp \
+    git+https://github.com/paulwrubel/yt-dlp \
     pyyaml \
     apscheduler
 
