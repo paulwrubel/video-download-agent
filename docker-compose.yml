@@ -7,4 +7,4 @@ services:
     container_name: video_download_agent
     volumes:
       - ./resources/local/config.yaml:/app/config.yaml:ro
-      - /mnt/diamond/media/youtube:/output
+      - ./output/local:/output
