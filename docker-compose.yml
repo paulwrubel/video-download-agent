@@ -1,0 +1,10 @@
+version: '3'
+services:
+  video_download_agent:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: video_download_agent
+    volumes:
+      - ./resources/local/config.yaml:/app/config.yaml:ro
+      - ./output/local:/output
