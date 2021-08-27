@@ -22,9 +22,7 @@ class VideoDownloadAgent():
 
         print('printing supplied configuration...')
         print('ALL OPTIONS:')
-        print('-'*20)
-        print(config)
-        print('-'*20)
+        print_block(config)
 
         sched = BackgroundScheduler()
         self.sched = sched
@@ -47,36 +45,41 @@ class VideoDownloadAgent():
             time.sleep(self.__ONE_DAY_IN_SECONDS)
 
     def __run_single_iteration(self):
-        print('running single iteration')
+        print_block('running single iteration', 1)
         config = self.config
         try:
             for set in config['sets']:
-                print(f'starting set {set["name"]}')
+                print_block(f'starting set {set["name"]}', 1)
                 set_opts = {
+                    'logger': YTDLPLogger(),
                     **self.config['global_options'],
                     **set['options']
                 }
                 try:
+                    print('creating yt_dlp instance')
+                    print_divider()
                     with yt_dlp.YoutubeDL(set_opts) as ytdlp:
+                        print_divider()
+                        print_empty_lines(1)
+
                         print('clearing yt-dlp cache')
-                        print('-'*20)
+                        print_divider()
                         ytdlp.cache.remove()
-                        print('-'*20)
-                        print('starting yt-dlp')
-                        print('-'*20)
+                        print_divider()
+                        print_empty_lines(1)
+
+                        print('starting yt-dlp download')
+                        print_divider()
                         ytdlp.download([set['url']])
-                        print('-'*20)
-                        print('set complete!')
-                        print('\n'*2, end=None)
+                        print_divider()
+                        print_empty_lines(2)
                 except Exception as e:
                     oops(e, f'error running ytdlp.download(): {e}')
-            print('iteration complete!')
-            print('\n'*2, end=None)
-            print('jobs info:')
-            print('-'*20)
+            print_block('iteration complete! awaiting next interval...', 2)
+            print_block('jobs info:')
             self.sched.print_jobs()
-            print('-'*20)
-            print('\n'*2, end=None)
+            print_divider()
+            print_empty_lines(2)
         except Exception as e:
             oops(e, f'error running single iteration: {e}')
 
@@ -91,21 +94,40 @@ def oops(e, err_string):
     raise e
 
 
-# class YTDLPLogger():
-#     def debug(self, msg):
-#         print(msg)
+def print_block(s, n=0):
+    print_divider()
+    print(s)
+    print_divider()
+    if n > 0:
+        print_empty_lines(n)
 
-#     def warning(self, msg):
-#         print(msg)
 
-#     def error(self, msg):
-#         print(msg)
+def print_empty_lines(n=2):
+    print('\n'*n, end=None)
+
+
+def print_divider():
+    print('-'*50)
+
+
+class YTDLPLogger():
+    def info(self, msg):
+        print(f'\t{msg}')
+
+    def debug(self, msg):
+        print(f'\t{msg}')
+
+    def warning(self, msg):
+        print(f'\t{msg}')
+
+    def error(self, msg):
+        print(f'\t{msg}')
 
 
 if __name__ == '__main__':
     agent = VideoDownloadAgent()
     try:
-        print('running agent')
+        print_block('running agent')
         agent.run()
     except Exception as e:
         oops(e, f'error while running agent: {e}')
