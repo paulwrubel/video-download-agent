@@ -20,14 +20,15 @@ steps:
         from_secret: docker_password
       repo: paulwrubel/video-download-agent
       tags:
-        - dev
+        - ${DRONE_BRANCH}
     when:
       branch:
-        - main
+        exclude:
+          - main
       event:
         - push
 
-  - name: publish-v2
+  - name: publish-stage
     image: plugins/docker
     settings:
       username:
@@ -36,14 +37,15 @@ steps:
         from_secret: docker_password
       repo: paulwrubel/video-download-agent
       tags:
-        - v2
+        - stage
+        - ${DRONE_BRANCH}
     when:
       branch:
-        - v2
+        - main
       event:
         - push
 
-  - name: publish
+  - name: publish-tag
     image: plugins/docker
     settings:
       username:
@@ -53,9 +55,7 @@ steps:
       repo: paulwrubel/video-download-agent
       tags:
         - latest
-        - prod
+        - ${DRONE_TAG##v}
     when:
-      branch:
-        - main
       event:
         - tag
