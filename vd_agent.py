@@ -66,14 +66,17 @@ class VideoDownloadAgent():
                         print('-'*20)
                         ytdlp.download([set['url']])
                         print('-'*20)
-                        print('download complete!')
+                        print('set complete!')
                         print('\n'*2, end=None)
-                        print('jobs info:')
-                        print('-'*20)
-                        self.sched.print_jobs()
-                        print('-'*20)
                 except Exception as e:
                     oops(e, f'error running ytdlp.download(): {e}')
+            print('iteration complete!')
+            print('\n'*2, end=None)
+            print('jobs info:')
+            print('-'*20)
+            self.sched.print_jobs()
+            print('-'*20)
+            print('\n'*2, end=None)
         except Exception as e:
             oops(e, f'error running single iteration: {e}')
 
